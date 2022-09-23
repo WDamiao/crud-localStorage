@@ -4,6 +4,7 @@ let btnAdicionar = document.getElementById("btnAdicionar")
 let ul = document.getElementById("lista")
 let listaItem = JSON.parse(localStorage.getItem("lista")) || []
 let id = 0
+let editId = null
 
 mostraLista(listaItem)
 
@@ -27,6 +28,8 @@ quantidade.addEventListener("keyup", function (e) {
     }
 })
 
+document.getElementById("btnAtualiza").addEventListener("click", atualizaElemento)
+
 function adicionaItem(item, quantidade) {
     novoItem = { nome: "", quantidade: "", id: 0 }
     novoItem.nome = item.value
@@ -41,7 +44,7 @@ function adicionaItem(item, quantidade) {
     listaItem.push(novoItem)
     localStorage.setItem("lista", JSON.stringify(listaItem))
     let li = ""
-    li = `<li id="${novoItem.id}"><strong>${quantidade.value}</strong>${item.value}${botaoEdita()}${botaoDelete()}</li>`
+    li = `<li id="${novoItem.id}"><strong>${quantidade.value}</strong>${item.value}${botaoEdita(novoItem.id)}${botaoDelete()}</li>`
     ul.innerHTML += li
     item.value = ""
     quantidade.value = ""
@@ -51,55 +54,52 @@ function mostraLista(listaItem) {
     let li = ""
     listaItem.forEach(element => {
         li = `<li id="${element.id}">
-        <strong>${element.quantidade}</strong>${element.nome} ${botaoEdita()} ${botaoDelete()}</li>`
+        <strong>${element.quantidade}</strong>${element.nome} ${botaoEdita(element.id)} ${botaoDelete()}</li>`
         ul.innerHTML += li
     });
 }
 
-function botaoEdita() {
-    let botao = `<button type="button" onclick="editaElemento(this.parentNode)" class="btnEdita">Editar</button>`
+function botaoEdita(id) {
+    let obj = listaItem.find(el => el.id == id)
+    let botao = `<button type="button" onclick="editaElemento(${obj.id})" class="btnEdita">Editar</button>`
     return botao
 }
 
-function toggleFade(){
+function toggleFade() {
     let fade = document.getElementById("fade")
     fade.classList.toggle("hide")
+
 }
 
-function editaElemento(tag) {
+function editaElemento(idAtual) {
+    editId = idAtual
+    let obj = listaItem.find(el => el.id == idAtual)
     toggleFade()
     document.getElementById("modalEdit").setAttribute("style", "display:flex")
-    let editItem = document.getElementById("editItem")
-    let editQuantidade = document.getElementById("editQuantidade")
-    let encontrado = listaItem.find(el => el.id == tag.id)
-    editItem.value = encontrado.nome
-    editQuantidade.value = encontrado.quantidade
-    atualizaElemento(encontrado, tag)
-    console.log(encontrado)
+    document.getElementById("editItem").value = obj.nome
+    document.getElementById("editQuantidade").value = obj.quantidade
 }
 
 function fecharModal() {
-        document.getElementById("editItem").value = ""
-        document.getElementById("editQuantidade").value=""
-        toggleFade()
-        document.getElementById("modalEdit").setAttribute("style", "display:none")
+    editId = null
+    document.getElementById("editItem").value = ""
+    document.getElementById("editQuantidade").value = ""
+    toggleFade()
+    document.getElementById("modalEdit").setAttribute("style", "display:none")
 }
 
-function atualizaElemento(encontrado, tag) {
-
-    document.getElementById("btnAtualiza").addEventListener("click", function () {
-        toggleFade()
-        encontrado.quantidade = parseInt(document.getElementById("editQuantidade").value)
-        encontrado.nome = document.getElementById("editItem").value
+function atualizaElemento() {
+    if (editId != null) {
+        let tag = document.getElementById(`${editId}`)
+        let item = listaItem.find(el => el.id == editId)
+        item.nome = document.getElementById("editItem").value
+        item.quantidade = parseInt(document.getElementById("editQuantidade").value)
         localStorage.setItem("lista", JSON.stringify(listaItem))
-        tag.children[0].value = encontrado.quantidade
-        tag.remove()
         ul.innerHTML = ""
         mostraLista(listaItem)
+        toggleFade()
         document.getElementById("modalEdit").setAttribute("style", "display:none")
-    }, { once: true })
-
-
+    } else { console.log("erro") }
 }
 
 function botaoDelete() {
@@ -108,7 +108,6 @@ function botaoDelete() {
 }
 
 function deletaElemento(tag) {
-    console.log("click")
     tag.remove()
     let item = listaItem.find(item => item.id == tag.id)
     let deletarItem = listaItem.indexOf(item)
