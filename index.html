@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD localStorage</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap" rel="stylesheet">
+    <script src="./main.js" defer></script>
+</head>
+<body>
+    <div id="fade" class="hide"></div>
+        <header>
+            <h1>CRUD - localStorage</h1>
+        </header>
+        <main>
+            <form>
+                <input type="text" placeholder="item" id="item">
+                <input type="number" placeholder="quantidade" id="quantidade">
+                <button type="button" id="btnAdicionar">Adicionar</button>
+            </form>
+            <aside>
+                <ul id="lista">   
+                </ul>
+            </aside>
+            <div id="modalEdit" class="modalEdit">
+                <div class="modalHeader">
+                    <h3>Atualizar Item</h3>
+                    <button onclick="fecharModal()" id="close" class="close" type="button">X</button>
+                </div>
+                <input id="editItem" type="text">
+                <input id="editQuantidade" type="number">
+                <button class="btnAtualiza" id="btnAtualiza" type="button">Atualizar</button>
+            </div>
+        </main>
+</body>
+</html>
