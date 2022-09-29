@@ -132,7 +132,7 @@ li:not(:last-child) {
 
 strong {
     padding: 0.6rem;
-    background-color: white;
+    background-color: var(--amarelo);
     border-radius: 100%;
     margin-right: 1rem;
     color: var(--maisEscuro);
