@@ -54,7 +54,7 @@ function mostraLista(listaItem) {
     let li = ""
     listaItem.forEach(element => {
         li = `<li id="${element.id}">
-        <strong>${element.quantidade}</strong>${element.nome} ${botaoEdita(element.id)} ${botaoDelete()}</li>`
+        <strong>${element.quantidade}</strong>${element.nome.charAt(0).toUpperCase() + element.nome.slice(1)} ${botaoEdita(element.id)} ${botaoDelete()}</li>`
         ul.innerHTML += li
     });
 }
